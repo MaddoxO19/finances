@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FM Quiz</title>
+<title>FM Practice Quiz</title>
 <meta name="description" content="Financial Management Quiz">
 <meta name="theme-color" content="#1d5f73">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -373,11 +373,11 @@ function renderStart() {
   });
   var shuf = el("input", { type: "checkbox", id: "shuf" });
   app.appendChild(el("div", { "class": "masthead" }, [
-    el("h1", { text: "Financial Management practice quiz" }),
-    el("p", { text: "ZBUS8310 Commercial Skills in the Public Sector. Built from the FM1 to FM4 slides and week 1 and 2 notes, aligned to CLO2: evaluate financial position and performance, and analyse risk, return, control and accountability." })
+    el("h1", { text: "Financial Management Practice Quiz" }),
+    el("p", { text: "Commercial Skills in the Public Sector. Slides FM1-FM4 and aligned to CLO2: evaluate financial position and performance, and analyse risk, return, control and accountability." })
   ]));
   app.appendChild(list);
-  app.appendChild(el("label", { "class": "opts" }, [shuf, el("span", { text: "Shuffle question order" })]));
+  app.appendChild(el("label", { "class": "opts" }, [shuf, el("span", { text: "Shuffle Question Order" })]));
   app.appendChild(el("p", { "class": "note", text: "Pick an answer, check it, then read the explanation. Keys A to D select an answer, Enter checks and moves on. Calculation questions use the unit\u2019s formulas and benchmarks (current ratio 1.5:1, quick ratio 0.8:1, interest cover above 3)." }));
 }
 
