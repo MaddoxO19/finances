@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FM Quiz</title>
+<meta name="description" content="ZBUS8310 Financial Management practice quiz (CLO2)">
+<meta name="theme-color" content="#1d5f73">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FM Quiz">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%231d5f73'/%3E%3Cpath d='M22 72V52h14v20zM43 72V32h14v40zM64 72V22h14v50z' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #e9edf1;
+  --panel: #f8fafb;
+  --ink: #15212c;
+  --muted: #566573;
+  --rule: #c5cfd8;
+  --accent: #1d5f73;
+  --accent-ink: #ffffff;
+  --accent-soft: #d6e6ec;
+  --ok: #24704a;
+  --ok-soft: #d9eee3;
+  --bad: #a93a32;
+  --bad-soft: #f5dddb;
+  --hint: #8a6414;
+  --hint-soft: #f3e8c9;
+  --seg: #bcc8d2;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10181f;
+    --panel: #18232c;
+    --ink: #e6edf2;
+    --muted: #9fb0bd;
+    --rule: #2f3f4c;
+    --accent: #6cb6cc;
+    --accent-ink: #0c1a21;
+    --accent-soft: #1e3742;
+    --ok: #63c18f;
+    --ok-soft: #173427;
+    --bad: #ef8a82;
+    --bad-soft: #3a1f1d;
+    --hint: #e4bd68;
+    --hint-soft: #372d13;
+    --seg: #34444f;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10181f;
+  --panel: #18232c;
+  --ink: #e6edf2;
+  --muted: #9fb0bd;
+  --rule: #2f3f4c;
+  --accent: #6cb6cc;
+  --accent-ink: #0c1a21;
+  --accent-soft: #1e3742;
+  --ok: #63c18f;
+  --ok-soft: #173427;
+  --bad: #ef8a82;
+  --bad-soft: #3a1f1d;
+  --hint: #e4bd68;
+  --hint-soft: #372d13;
+  --seg: #34444f;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 720px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-left, 0px)) 72px max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 600px) { .wrap { padding-top: 32px; padding-left: 20px; padding-right: 20px; } }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; margin: 0; line-height: 1.2; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+input, button { font-size: 16px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* start screen */
+.masthead { border-left: 5px solid var(--accent); padding-left: 16px; margin-bottom: 28px; }
+.masthead h1 { font-size: clamp(1.7rem, 5vw, 2.3rem); }
+.masthead p { color: var(--muted); margin-top: 8px; max-width: 56ch; }
+.modes { display: grid; gap: 10px; margin: 0 0 22px; padding: 0; list-style: none; }
+.mode {
+  width: 100%; text-align: left; background: var(--panel);
+  border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px;
+  display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: baseline;
+}
+.mode:hover { border-color: var(--accent); }
+.mode .name { font-weight: 600; }
+.mode .count { font-variant-numeric: tabular-nums; color: var(--muted); }
+.mode .desc { grid-column: 1 / -1; color: var(--muted); font-size: 0.9rem; }
+.mode.all { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.mode.all .count, .mode.all .desc { color: var(--accent-ink); opacity: 0.85; }
+.opts { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.95rem; }
+.opts input { width: 18px; height: 18px; accent-color: var(--accent); }
+.note { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.88rem; }
+
+/* quiz */
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 10px; font-size: 0.92rem; color: var(--muted); }
+.top .where { font-variant-numeric: tabular-nums; }
+.top .score { font-variant-numeric: tabular-nums; }
+.strip { display: flex; gap: 3px; margin-bottom: 26px; }
+.strip i { flex: 1; height: 8px; border-radius: 2px; background: var(--seg); min-width: 3px; }
+.strip i.ok { background: var(--ok); }
+.strip i.bad { background: var(--bad); }
+.strip i.now { background: var(--accent); }
+.tag { display: inline-block; font-size: 0.85rem; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+.q { font-family: var(--serif); font-size: clamp(1.15rem, 3.6vw, 1.4rem); line-height: 1.45; margin-bottom: 22px; }
+.choices { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.choice {
+  width: 100%; text-align: left; background: var(--panel);
+  border: 1.5px solid var(--rule); border-radius: 6px; padding: 14px;
+  min-height: 52px;
+  display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start;
+}
+.choice .key {
+  font-weight: 600; width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px solid var(--rule); display: grid; place-items: center; font-size: 0.85rem;
+}
+.choice .label { display: block; }
+.choice .status { display: block; font-size: 0.82rem; font-weight: 600; margin-top: 4px; }
+.choice:hover:not([disabled]) { border-color: var(--accent); }
+.choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.choice[aria-pressed="true"] .key { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.choice[disabled] { cursor: default; }
+.choice.right { border-color: var(--ok); background: var(--ok-soft); }
+.choice.right .key { background: var(--ok); color: #fff; border-color: var(--ok); }
+.choice.right .status { color: var(--ok); }
+.choice.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.choice.wrong .key { background: var(--bad); color: #fff; border-color: var(--bad); }
+.choice.wrong .status { color: var(--bad); }
+.hintbox { margin-top: 16px; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+.hinttext { margin-top: 8px; background: var(--hint-soft); color: var(--ink); border-left: 4px solid var(--hint); padding: 10px 12px; border-radius: 0 6px 6px 0; font-size: 0.95rem; }
+.feedback { margin-top: 20px; border-left: 4px solid var(--rule); padding: 4px 0 4px 16px; }
+.feedback.ok { border-color: var(--ok); }
+.feedback.bad { border-color: var(--bad); }
+.feedback h3 { font-size: 1.05rem; margin-bottom: 6px; font-family: var(--sans); }
+.feedback.ok h3 { color: var(--ok); }
+.feedback.bad h3 { color: var(--bad); }
+.actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+@media (max-width: 480px) { .actions .btn { flex: 1 1 100%; } .quit { margin-left: 0; } }
+.btn {
+  background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 6px;
+  padding: 14px 22px; min-height: 48px; font-weight: 600;
+}
+.btn:hover:not([disabled]) { filter: brightness(1.08); }
+.btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--rule); }
+.btn.ghost:hover { border-color: var(--accent); filter: none; }
+.quit { margin-left: auto; }
+
+/* results */
+.big { font-family: var(--serif); font-size: clamp(2.6rem, 11vw, 4rem); font-weight: 600; line-height: 1; }
+.big small { font-size: 0.4em; color: var(--muted); font-weight: 400; }
+.verdict { margin-top: 10px; color: var(--muted); max-width: 52ch; }
+.mods { margin: 26px 0; display: grid; gap: 14px; }
+.mrow .mhead { display: flex; justify-content: space-between; gap: 12px; font-size: 0.95rem; margin-bottom: 5px; }
+.mrow .mhead span:last-child { font-variant-numeric: tabular-nums; color: var(--muted); }
+.bar { height: 10px; background: var(--seg); border-radius: 3px; overflow: hidden; }
+.bar b { display: block; height: 100%; background: var(--accent); }
+.missed { margin-top: 30px; }
+.missed h2 { font-size: 1.25rem; margin-bottom: 14px; }
+.miss { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; margin-bottom: 12px; }
+.miss .tag { margin-bottom: 4px; }
+.miss .mq { font-family: var(--serif); margin-bottom: 8px; }
+.miss .ans { font-weight: 600; color: var(--ok); margin-bottom: 6px; font-size: 0.95rem; }
+.miss .why { color: var(--muted); font-size: 0.95rem; }
+.perfect { margin-top: 26px; color: var(--ok); font-weight: 600; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .choice, .mode { transition: border-color 0.12s, background-color 0.12s, filter 0.12s; }
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+var MODULES = [
+  { name: "Governance and accounting basics", desc: "Three lines of defence, assurance, audit types, accrual accounting, cash flow classification (FM1)" },
+  { name: "Financial statement analysis", desc: "Trend and vertical analysis, profitability, efficiency, leverage and liquidity ratios, audit opinions (FM2)" },
+  { name: "Budgets and capital investment", desc: "Cost behaviour, budgeting behaviour, cash budgets, payback, NPV, IRR, CBA and CEA (FM3)" },
+  { name: "Variance analysis and performance", desc: "Flexible budgets, price and quantity variances, responsibility centres, leading and lagging KPIs (FM4)" }
+];
+
+var Q = [
+  { m: 0, p: "In the Three Lines of Defence model applied to Defence, which group forms the third line?",
+    o: ["Commanders and branch heads who own day-to-day risk", "Defence internal audit, Risk, Compliance, Legal and Finance", "External audit (ANAO) and external review such as Senate committees", "Project teams that design internal controls"], c: 2,
+    h: "Independence from the management chain is the deciding feature.",
+    e: "The first line (operational management) owns and manages risk. The second line (oversight and support, including internal audit, risk, compliance and finance) monitors and challenges the first. The third line is independent assurance from bodies outside the chain, such as the ANAO and Senate review, which test whether lines one and two work as intended." },
+  { m: 0, p: "A reviewer reports, \u201cI found nothing that would suggest the system is not working as intended.\u201d Which level of assurance is this?",
+    o: ["Reasonable assurance", "Limited assurance", "Absolute assurance", "Verification, not assurance"], c: 1,
+    h: "Look at how the conclusion is worded.",
+    e: "Limited assurance is expressed in negative form and rests on less evidence, so it speaks to plausibility rather than accuracy. Reasonable assurance is a higher, positive opinion about material misstatement, and even that is never absolute. Checklists and inspections typically provide only limited assurance." },
+  { m: 0, p: "The annual audit of Defence\u2019s financial statements is best classified as which type of audit?",
+    o: ["A performance audit, because it examines value for money", "A compliance audit, because it checks preparation against laws and financial standards", "An inspection, because it uses checklists", "A management review, because it is internal"], c: 1,
+    e: "A financial statement audit tests whether the statements were prepared in accordance with relevant law and standards, with a pass or breach style outcome. A performance audit is risk-based and asks how efficiently and effectively resources were used, for example the ANAO\u2019s audits of large acquisition and sustainment programs." },
+  { m: 0, p: "In June a contractor delivers services worth $10,000 and receives payment in July. It used $4,000 of supplies purchased in an earlier month. What is June profit on an accrual basis?",
+    o: ["$10,000", "$0", "$6,000", "($4,000)"], c: 2,
+    h: "Ignore when cash moved.",
+    e: "Accrual accounting recognises revenue when the service is provided ($10,000) and the expense when the asset is used up ($4,000), giving $6,000 profit. June cash profit is nil because no cash moved in June. Timing differences between profit and cash are why the cash flow statement is needed." },
+  { m: 0, p: "Which pairing correctly classifies these items in the Statement of Cash Flows?",
+    o: ["Dividends paid: operating. Purchase of vehicles: investing", "Dividends paid: financing. Purchase of vehicles: operating", "Dividends paid: investing. Purchase of vehicles: financing", "Dividends paid: financing. Purchase of vehicles: investing"], c: 3,
+    e: "Operating flows come from normal trading. Investing flows relate to buying and selling non-current assets such as vehicles and buildings. Financing flows relate to raising or repaying debt and equity and distributing profits, including dividends." },
+
+  { m: 1, p: "A prospective supplier\u2019s auditor\u2019s report is qualified. What does this most directly tell a Defence tender evaluator?",
+    o: ["The statements are correct in all respects", "The auditor is not independent of the company", "The company is insolvent", "The auditor could not give assurance on something in the statements, so the report is \u201cfine except for\u201d that item"], c: 3,
+    e: "A qualification flags an item the auditor could not provide assurance on. There is sometimes a legitimate reason, but it can also indicate fraud. It is a red flag that warrants clarification questions or other sources such as credit reports, not an automatic exclusion." },
+  { m: 1, p: "A supplier\u2019s operating revenue was $800m in 2023 (base year) and $680m in 2026. What is the 2026 trend index?",
+    o: ["117.6", "85.0", "15.0", "680.0"], c: 1,
+    h: "Current year divided by base year.",
+    e: "Trend analysis sets the base year to 100 and expresses later years as current result divided by base year result, times 100. 680 / 800 x 100 = 85, a 15 per cent fall over three years. Trend data show direction but not cause, and past performance does not guarantee future performance." },
+  { m: 1, p: "In a vertical (common-size) analysis, each line of the income statement is expressed as a percentage of which base item?",
+    o: ["Total assets", "Net profit", "Total revenues", "The same line in the prior year"], c: 2,
+    e: "Income statements are common-sized to total revenues and balance sheets to total assets. Because the result is scale-free, entities of different sizes can be compared. Comparing to the prior year is horizontal analysis." },
+  { m: 1, p: "EBIT is $240m. Total assets were $1,000m at the start of the year and $1,400m at the end. What is return on assets (ROA) using the method taught in the unit?",
+    o: ["17.1%", "24.0%", "12.0%", "20.0%"], c: 3,
+    h: "Use the average of opening and closing assets.",
+    e: "ROA = EBIT / average total assets x 100 = 240 / ((1,000 + 1,400) / 2) = 20%. EBIT is used because it removes the effect of debt structure and tax on the result. ROA can be decomposed into profit margin x asset turnover." },
+  { m: 1, p: "A supplier has current assets of $300m (including inventory of $80m and prepayments of $20m) and current liabilities of $200m. What are its current and quick ratios?",
+    o: ["Current 1.5:1, quick 1.1:1", "Current 1.5:1, quick 0.5:1", "Current 1.5:1, quick 1.0:1", "Current 1.0:1, quick 1.5:1"], c: 2,
+    h: "Remove both inventory and prepayments.",
+    e: "Current ratio = 300 / 200 = 1.5:1. The quick ratio excludes inventory and prepayments because they are hard to convert quickly to cash: (300 - 80 - 20) / 200 = 1.0:1. The unit benchmarks are 1.5:1 for the current ratio and 0.8:1 for the quick ratio." },
+  { m: 1, p: "A contractor\u2019s credit sales are $7.3m and average receivables are $1.0m. How many days, on average, does it take to collect from customers?",
+    o: ["7.3 days", "30 days", "73 days", "50 days"], c: 3,
+    e: "Receivables turnover = 7.3 / 1.0 = 7.3 times. Days receivables = 365 / 7.3 = 50 days. Against a 30-day rule of thumb, slow collection ties up cash, which is relevant when judging a supplier\u2019s liquidity and its likely demands on progress payment terms." },
+  { m: 1, p: "A firm holds inventory 45 days, collects from debtors in 35 days and pays creditors in 60 days. What does the resulting cash flow cycle indicate?",
+    o: ["It collects from customers 20 days before it pays suppliers, so suppliers fund operations", "It is out of pocket for about 20 days between paying suppliers and collecting cash, so it may need short-term finance", "It is out of pocket for 140 days", "Nothing, because the three measures cannot be combined"], c: 1,
+    e: "Cash flow cycle = days inventory + days receivables - days creditors = 45 + 35 - 60 = 20 days. A positive result is a period of negative cash flow that may need short-term funding. A negative result (as with Downer at about -62 days) means the firm uses suppliers\u2019 money to fund operations, which raises the ethical question the slides pose." },
+  { m: 1, p: "A supplier has total assets of $8,000m and total liabilities of $6,000m. Which statement is correct?",
+    o: ["Debt ratio 75%, financial leverage 4.0:1, so it relies more on debt than equity", "Debt ratio 25%, financial leverage 4.0:1, so it relies more on equity", "Debt ratio 75%, financial leverage 1.33:1, so it relies more on debt than equity", "Debt ratio 60%, financial leverage 2.0:1"], c: 0,
+    e: "Debt ratio = 6,000 / 8,000 = 75%. Equity = 2,000, so financial leverage (equity multiplier) = total assets / equity = 8,000 / 2,000 = 4.0:1. A debt ratio above 50% means greater reliance on debt, and higher leverage means higher financial risk." },
+  { m: 1, p: "A supplier\u2019s EBIT is $750k and its net finance costs are $300k. How should the interest cover be read against the unit\u2019s benchmark?",
+    o: ["2.5 times, above the benchmark, so interest is comfortably covered", "0.4 times, so the firm cannot pay any interest", "2.5 times, below the benchmark of 3, so there is elevated risk of default on interest", "4.0 times, meeting the benchmark"], c: 2,
+    e: "Interest cover = EBIT / net finance costs = 750 / 300 = 2.5 times. The unit\u2019s rule of thumb is greater than 3. The ratio is inversely related to the risk of defaulting on interest payments, so 2.5 signals thinner protection for lenders and, indirectly, for a customer relying on the supplier\u2019s continuity." },
+  { m: 1, p: "A company has EPS of $0.60, DPS of $0.48 and a share price of $12. Which statement is correct?",
+    o: ["P/E is 20, payout ratio is 80%, so 20% of profit was retained", "P/E is 20, payout ratio is 20%, so 80% of profit was retained", "P/E is 5, payout ratio is 80%", "P/E is 5, payout ratio is 20%"], c: 0,
+    h: "Compute both ratios before choosing.",
+    e: "P/E = price / EPS = 12 / 0.60 = 20 years of earnings. Dividend payout ratio = DPS / EPS = 0.48 / 0.60 = 80%, so 20% of the year\u2019s profit was retained. A payout below 100% means the business kept some profit as equity." },
+  { m: 1, p: "Which is a genuine limitation of ratio analysis?",
+    o: ["Ratios cannot compare firms of different sizes", "Ratios rely on historical, highly aggregated figures and can be influenced by strategically selected transactions", "Ratios ignore risk and consider only return", "Ratios can only be calculated with market data"], c: 1,
+    e: "Ratios use historical numbers, not future plans or current market values, and are only as good as the underlying data. Different calculation methods also limit comparability. Ratios are scale-free, so size is not the constraint, and they inform both risk and return." },
+
+  { m: 2, p: "Transport cost is fixed while one bus is enough, then jumps when a second bus is needed as trainee numbers grow. Which cost behaviour is this?",
+    o: ["Variable", "Mixed", "Sunk", "Stepped"], c: 3,
+    e: "Stepped costs are fixed over a range of capacity and step up when capacity is exceeded, so the relationship with activity is not directly proportional. Capacity constraints determine whether a cost behaves as fixed or variable over the relevant range." },
+  { m: 2, p: "Defence is deciding whether to keep or replace an ageing vehicle fleet. $2m was spent on a refurbishment last year and cannot be recovered. How should it be treated?",
+    o: ["Include it, because it is large", "Exclude it as a sunk cost, because it does not differ between the options", "Include it at its depreciated value", "Include it only in the replace option"], c: 1,
+    e: "Strategic choices such as keep or replace, make or buy, and lease or own should rest on relevant costs, meaning those that differ between options. Sunk costs are already spent and will not change with the decision." },
+  { m: 2, p: "Executives invite unit managers to submit budget input but then disregard it. Which approach is this, and what is the likely consequence?",
+    o: ["Authoritative budgeting, which improves data quality", "Participative budgeting, which builds ownership", "Pseudo-participation, which is dysfunctional and tends to breed distrust and budget slack", "Zero-based budgeting, which resets each line to nil"], c: 2,
+    e: "Pseudo-participation is a dysfunctional form of input in which managers pretend to seek input and ignore it. FM3 notes that slack tends to arise from lack of trust, driven by unachievable targets and accountability for outcomes managers cannot control." },
+  { m: 2, p: "Quarterly sales are $200,000 and prior quarter sales were $160,000. Ten per cent of sales are for cash. Of credit sales, 75% are collected in the quarter of sale and 25% in the next quarter. What are this quarter\u2019s total cash receipts from sales?",
+    o: ["$155,000", "$180,000", "$191,000", "$200,000"], c: 2,
+    h: "Do not forget last quarter\u2019s uncollected credit sales.",
+    e: "Cash sales = 10% x 200,000 = 20,000. Current credit sales collected = 75% x 180,000 = 135,000. Prior quarter credit sales collected = 25% x (90% x 160,000) = 36,000. Total = 191,000. The common error is to omit the carry-over from the previous quarter, which gives 155,000." },
+  { m: 2, p: "An investment costs $500,000 and returns $150k, $200k, $250k and $300k at the end of years 1 to 4. What is the payback period?",
+    o: ["2.0 years", "3.0 years", "3.4 years", "2.6 years"], c: 3,
+    e: "Cumulative cash flow is $350k after year 2, leaving $150k to recover in year 3 from a $250k inflow, so 2 + 0.6 = 2.6 years. Payback is simple but ignores the time value of money and every cash flow after the payback point." },
+  { m: 2, p: "An outlay of $100,000 now returns $60,000 at the end of year 1 and $60,000 at the end of year 2. At a 10% discount rate (PV factors 0.909 and 0.826), what is the approximate NPV and the decision?",
+    o: ["$20,000, accept", "About $4,100, accept because NPV is above zero", "About -$4,100, reject", "$120,000, accept"], c: 1,
+    h: "Discount each inflow, then subtract the outlay.",
+    e: "PV of inflows = 60,000 x 0.909 + 60,000 x 0.826 = 104,100. NPV = 104,100 - 100,000 = 4,100 (about $4,132 without rounded factors). The decision rule is to accept when NPV is at or above zero. The common error is to skip discounting, which gives $20,000." },
+  { m: 2, p: "Why is NPV preferred to IRR when ranking mutually exclusive projects?",
+    o: ["NPV expresses value added in dollars, can rank mutually exclusive projects and can be summed across projects, whereas IRR cannot", "NPV does not require a discount rate", "NPV always gives the same ranking as payback", "NPV avoids the need for cash flow forecasts"], c: 0,
+    e: "IRR is the discount rate at which NPV equals zero and must exceed the required rate of return. It is a useful percentage, but it cannot rank mutually exclusive projects or be added across a portfolio. NPV also copes with varying rates over time." },
+  { m: 2, p: "Option A has NPV $2.0m but weak strategic fit. Option B has NPV $1.6m and is essential to a Fundamental Input to Capability. What does the CBA guidance support?",
+    o: ["Always recommend A, because NPV is the decision rule", "Recommend B if the non-monetised benefits are documented and the override of NPV is justified with evidence", "Reject both because NPV values differ", "Choose the option with the shorter payback regardless of benefits"], c: 1,
+    e: "The recommended option is the one with the highest net benefit, which is not necessarily the highest NPV. Where a lower NPV offers greater overall benefit, clear reasons and supporting evidence for the intangible costs and benefits must explain the override. Non-financial criteria such as strategic alignment, supply chain and reputation can take priority." },
+  { m: 2, p: "When is cost-effectiveness analysis (CEA) used instead of cost-benefit analysis?",
+    o: ["When costs cannot be estimated", "When NPV is negative", "When benefits are difficult to identify or quantify in dollars, so financial cost is compared with non-financial outcomes such as safety or compliance", "When the discount rate is zero"], c: 2,
+    e: "CEA compares financial cost with non-financial benefits such as quality, safety or legal compliance. CBA seeks to monetise impacts so they can be compared across sectors." },
+
+  { m: 3, p: "The static budget assumes 500 units, price $40, variable cost $22 per unit and fixed costs $6,000. Actual sales are 600 units. What is the flexible budget profit and the volume (activity) variance?",
+    o: ["$10,800 profit, $7,800 F", "$3,000 profit, nil variance", "$4,800 profit, $1,800 U", "$4,800 profit, $1,800 F"], c: 3,
+    h: "Fixed costs do not flex.",
+    e: "Static profit = 500 x (40 - 22) - 6,000 = 3,000. Flexible profit at 600 units = 600 x 18 - 6,000 = 4,800. The flexible budget restates the budget at actual activity using budgeted prices, and only variable costs move with volume; fixed costs stay at $6,000. The $1,800 is favourable because profit is higher. The common error is to leave out fixed costs, which gives $10,800." },
+  { m: 3, p: "Static labour budget: 10 units x 5 hours x $30 = $1,500. Actual: 12 units, 66 hours, $32 per hour = $2,112. What are the price and quantity variances?",
+    o: ["Price $132 U, quantity $480 U", "Price $132 F, quantity $744 U", "Price $612 U, quantity nil", "Price $480 U, quantity $132 U"], c: 0,
+    h: "Flexible budget = budget price x actual quantity.",
+    e: "Flexible budget = budget price x actual quantity = $30 x 66 = $1,980. Quantity variance = 1,980 - 1,500 = $480 U. Price variance = actual cost 2,112 - 1,980 = $132 U. Together they explain the $612 U static variance. The static variance alone shows what happened but not why." },
+  { m: 3, p: "Using the same labour data, how is the $480 U quantity variance split between activity and efficiency?",
+    o: ["Activity $180 U, efficiency $300 U", "Activity $300 U, efficiency $180 U", "Activity $480 U, efficiency nil", "Activity $132 U, efficiency $348 U"], c: 1,
+    e: "Expected hours for 12 units = 12 x 5 = 60 hours, costing 60 x $30 = $1,800. Activity variance = 1,800 - 1,500 = $300 U (more units). Efficiency variance = (66 - 60) hours x $30 = $180 U (more hours per unit than planned). The same logic was applied to the Rotordyne aircraft example." },
+  { m: 3, p: "Which variances should a manager consider investigating?",
+    o: ["Only unfavourable variances", "Only variances above 20%", "None, because budgets are estimates", "Significant variances in both directions, because a favourable variance can signal a problem"], c: 3,
+    e: "A management-by-exception approach investigates variances beyond a set threshold (for example 3, 5 or 10 per cent), and also considers patterns, trends and controllability. A favourable cost variance could reflect deferred maintenance, under-delivery or a poor budget assumption." },
+  { m: 3, p: "A sub-unit manager is held accountable only for costs, and the report includes only items the manager can influence. What is this sub-unit, and which principle is applied?",
+    o: ["Profit centre, materiality", "Cost centre, controllability", "Investment centre, controllability", "Revenue centre, materiality"], c: 1,
+    e: "A cost centre is accountable for costs only, a profit centre for revenue and costs, and an investment centre also for investment in assets. Controllability means people should not be held accountable for what they cannot control, which links directly to accountability under CLO2." },
+  { m: 3, p: "For a staff training course, which pairing of KPIs is correct?",
+    o: ["Leading: percentage passing the competency assessment. Lagging: number of staff enrolled", "Leading: number of staff enrolled. Lagging: percentage passing the competency assessment", "Both are leading indicators", "Both are lagging indicators"], c: 1,
+    e: "Leading indicators describe inputs, actions and resources used (enrolments, room bookings, development hours). Lagging indicators describe outputs and outcomes (courses held, completions, pass rates). Pairing both with budget variances is the logic behind the balanced scorecard approach." }
+];
+
+var LETTERS = ["A", "B", "C", "D"];
+var app = document.getElementById("app");
+var S = null;
+
+function el(tag, attrs, kids) {
+  var n = document.createElement(tag);
+  if (attrs) {
+    Object.keys(attrs).forEach(function (k) {
+      if (k === "class") n.className = attrs[k];
+      else if (k === "text") n.textContent = attrs[k];
+      else if (k.indexOf("on") === 0) n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    });
+  }
+  (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+  return n;
+}
+function shuffle(a) {
+  a = a.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function makePerm(pool) {
+  var p = {};
+  pool.forEach(function (qi) { p[qi] = shuffle(Q[qi].o.map(function (x, i) { return i; })); });
+  return p;
+}
+function clear() { while (app.firstChild) app.removeChild(app.firstChild); window.scrollTo(0, 0); }
+function countIn(m) { return Q.filter(function (q) { return q.m === m; }).length; }
+
+function start(pool) {
+  var shuffled = document.getElementById("shuf") && document.getElementById("shuf").checked;
+  var pl = shuffled ? shuffle(pool) : pool.slice();
+  S = { pool: pl, perm: makePerm(pl), pos: 0, picked: null, checked: false, res: {}, hint: false };
+  renderQuestion();
+}
+
+function renderStart() {
+  S = null;
+  clear();
+  var list = el("ul", { "class": "modes" });
+  var all = el("button", { "class": "mode all", type: "button", onclick: function () { start(Q.map(function (q, i) { return i; })); } }, [
+    el("span", { "class": "name", text: "All modules" }),
+    el("span", { "class": "count", text: Q.length + " questions" }),
+    el("span", { "class": "desc", text: "Full run in slide order. Matches the spread of the final exam." })
+  ]);
+  list.appendChild(el("li", null, [all]));
+  MODULES.forEach(function (mod, mi) {
+    var b = el("button", { "class": "mode", type: "button", onclick: function () {
+      start(Q.map(function (q, i) { return i; }).filter(function (i) { return Q[i].m === mi; }));
+    } }, [
+      el("span", { "class": "name", text: mod.name }),
+      el("span", { "class": "count", text: countIn(mi) + " questions" }),
+      el("span", { "class": "desc", text: mod.desc })
+    ]);
+    list.appendChild(el("li", null, [b]));
+  });
+  var shuf = el("input", { type: "checkbox", id: "shuf" });
+  app.appendChild(el("div", { "class": "masthead" }, [
+    el("h1", { text: "Financial Management practice quiz" }),
+    el("p", { text: "ZBUS8310 Commercial Skills in the Public Sector. Built from the FM1 to FM4 slides and week 1 and 2 notes, aligned to CLO2: evaluate financial position and performance, and analyse risk, return, control and accountability." })
+  ]));
+  app.appendChild(list);
+  app.appendChild(el("label", { "class": "opts" }, [shuf, el("span", { text: "Shuffle question order" })]));
+  app.appendChild(el("p", { "class": "note", text: "Pick an answer, check it, then read the explanation. Keys A to D select an answer, Enter checks and moves on. Calculation questions use the unit\u2019s formulas and benchmarks (current ratio 1.5:1, quick ratio 0.8:1, interest cover above 3)." }));
+}
+
+function renderQuestion() {
+  clear();
+  var qi = S.pool[S.pos];
+  var q = Q[qi];
+  var total = S.pool.length;
+  var correct = Object.keys(S.res).filter(function (k) { return S.res[k]; }).length;
+  var answered = Object.keys(S.res).length;
+
+  var strip = el("div", { "class": "strip", "aria-hidden": "true" });
+  S.pool.forEach(function (idx, i) {
+    var cls = "";
+    if (S.res.hasOwnProperty(idx)) cls = S.res[idx] ? "ok" : "bad";
+    else if (i === S.pos) cls = "now";
+    strip.appendChild(el("i", { "class": cls }));
+  });
+
+  app.appendChild(el("div", { "class": "top" }, [
+    el("span", { "class": "where", text: "Question " + (S.pos + 1) + " of " + total }),
+    el("span", { "class": "score", text: correct + " of " + answered + " correct" })
+  ]));
+  app.appendChild(strip);
+  app.appendChild(el("div", { "class": "tag", text: MODULES[q.m].name }));
+  app.appendChild(el("h2", { "class": "q", text: q.p }));
+
+  var list = el("ul", { "class": "choices" });
+  var perm = S.perm[qi];
+  var cd = perm.indexOf(q.c);
+  perm.forEach(function (orig, i) {
+    var txt = q.o[orig];
+    var cls = "choice";
+    var status = null;
+    if (S.checked) {
+      if (i === cd) { cls += " right"; status = "Correct answer"; }
+      else if (i === S.picked) { cls += " wrong"; status = "Your answer"; }
+    }
+    var label = el("span", { "class": "label" }, [document.createTextNode(txt)]);
+    if (status) label.appendChild(el("span", { "class": "status", text: status }));
+    var b = el("button", {
+      "class": cls, type: "button", "aria-pressed": (S.picked === i ? "true" : "false"),
+      onclick: function () { if (!S.checked) { S.picked = i; renderQuestion(); } }
+    }, [el("span", { "class": "key", text: LETTERS[i] }), label]);
+    if (S.checked) b.setAttribute("disabled", "disabled");
+    list.appendChild(el("li", null, [b]));
+  });
+  app.appendChild(list);
+
+  if (!S.checked && q.h) {
+    var hb = el("div", { "class": "hintbox" });
+    if (S.hint) hb.appendChild(el("p", { "class": "hinttext", text: q.h }));
+    else hb.appendChild(el("button", { "class": "linkbtn", type: "button", text: "Show a hint", onclick: function () { S.hint = true; renderQuestion(); } }));
+    app.appendChild(hb);
+  }
+
+  if (S.checked) {
+    var ok = S.picked === cd;
+    var fb = el("div", { "class": "feedback " + (ok ? "ok" : "bad"), role: "status" }, [
+      el("h3", { text: ok ? "Correct" : "Not quite. The answer is " + LETTERS[cd] + "." }),
+      el("p", { text: q.e })
+    ]);
+    app.appendChild(fb);
+  }
+
+  var actions = el("div", { "class": "actions" });
+  if (!S.checked) {
+    var chk = el("button", { "class": "btn", type: "button", text: "Check answer", onclick: checkAnswer });
+    if (S.picked === null) chk.setAttribute("disabled", "disabled");
+    actions.appendChild(chk);
+  } else {
+    var last = S.pos === total - 1;
+    actions.appendChild(el("button", { "class": "btn", type: "button", id: "nextbtn", text: last ? "See results" : "Next question", onclick: next }));
+  }
+  actions.appendChild(el("button", { "class": "btn ghost quit", type: "button", text: "Quit", onclick: renderStart }));
+  app.appendChild(actions);
+  var nb = document.getElementById("nextbtn");
+  if (nb) nb.focus({ preventScroll: true });
+}
+
+function checkAnswer() {
+  if (S.picked === null || S.checked) return;
+  var qi = S.pool[S.pos];
+  S.checked = true;
+  S.res[qi] = (S.picked === S.perm[qi].indexOf(Q[qi].c));
+  renderQuestion();
+  var fb = document.querySelector(".feedback");
+  if (fb && fb.scrollIntoView) fb.scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
+
+function next() {
+  if (S.pos < S.pool.length - 1) {
+    S.pos++; S.picked = null; S.checked = false; S.hint = false;
+    renderQuestion();
+  } else {
+    renderResults();
+  }
+}
+
+function renderResults() {
+  clear();
+  var ids = S.pool;
+  var correct = ids.filter(function (i) { return S.res[i]; });
+  var missed = ids.filter(function (i) { return !S.res[i]; });
+  var pct = Math.round(100 * correct.length / ids.length);
+  var verdict;
+  if (pct === 100) verdict = "Every question correct.";
+  else if (pct >= 80) verdict = "Strong. Review the missed questions below and retry them.";
+  else if (pct >= 60) verdict = "Solid base with gaps. Work through the missed questions below, then retry them.";
+  else verdict = "Return to the slides for the modules with the lowest scores below, then retry the missed questions.";
+
+  var big = el("div", { "class": "big" }, [document.createTextNode(correct.length), el("small", { text: " of " + ids.length + " (" + pct + "%)" })]);
+  app.appendChild(el("h1", { text: "Results", "class": "tag" }));
+  app.appendChild(big);
+  app.appendChild(el("p", { "class": "verdict", text: verdict }));
+
+  var mods = el("div", { "class": "mods" });
+  MODULES.forEach(function (mod, mi) {
+    var inMod = ids.filter(function (i) { return Q[i].m === mi; });
+    if (!inMod.length) return;
+    var got = inMod.filter(function (i) { return S.res[i]; }).length;
+    var w = Math.round(100 * got / inMod.length);
+    mods.appendChild(el("div", { "class": "mrow" }, [
+      el("div", { "class": "mhead" }, [el("span", { text: mod.name }), el("span", { text: got + " of " + inMod.length })]),
+      el("div", { "class": "bar", role: "img", "aria-label": mod.name + ": " + got + " of " + inMod.length }, [el("b", { style: "width:" + w + "%" })])
+    ]));
+  });
+  app.appendChild(mods);
+
+  var actions = el("div", { "class": "actions" });
+  if (missed.length) {
+    actions.appendChild(el("button", { "class": "btn", type: "button", text: "Retry missed (" + missed.length + ")", onclick: function () {
+      S = { pool: missed.slice(), perm: makePerm(missed), pos: 0, picked: null, checked: false, res: {}, hint: false };
+      renderQuestion();
+    } }));
+  }
+  actions.appendChild(el("button", { "class": "btn ghost", type: "button", text: "Back to start", onclick: renderStart }));
+  app.appendChild(actions);
+
+  if (missed.length) {
+    var box = el("section", { "class": "missed" }, [el("h2", { text: "Review missed questions" })]);
+    missed.forEach(function (i) {
+      var q = Q[i];
+      box.appendChild(el("div", { "class": "miss" }, [
+        el("div", { "class": "tag", text: MODULES[q.m].name }),
+        el("p", { "class": "mq", text: q.p }),
+        el("p", { "class": "ans", text: "Correct answer: " + q.o[q.c] }),
+        el("p", { "class": "why", text: q.e })
+      ]));
+    });
+    app.appendChild(box);
+  } else {
+    app.appendChild(el("p", { "class": "perfect", text: "No missed questions to review." }));
+  }
+}
+
+document.addEventListener("keydown", function (e) {
+  if (!S || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (document.querySelector(".results-open")) return;
+  var t = e.target && e.target.tagName;
+  if (t === "INPUT") return;
+  var qEl = document.querySelector(".choices");
+  if (!qEl) return;
+  var k = e.key.toLowerCase();
+  var idx = ["a", "b", "c", "d"].indexOf(k);
+  if (idx > -1 && !S.checked) {
+    var q = Q[S.pool[S.pos]];
+    if (idx < q.o.length) { S.picked = idx; renderQuestion(); }
+  } else if (e.key === "Enter" && t !== "BUTTON") {
+    if (!S.checked && S.picked !== null) checkAnswer();
+    else if (S.checked) next();
+  }
+});
+
+renderStart();
+</script>
+</body>
+</html>
